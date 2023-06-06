@@ -2,7 +2,7 @@ const axios = require ('axios');
 // const {API_KEY}= process.env;
 const API_KEY = '9f9b9dbd1a804ddabea15e6db712a786';
 const getApiInfo = async()=>{
-    console.log('APIKEY ', API_KEY)
+    // console.log('APIKEY ', API_KEY)
     try {
         let arrayPromises=[];    
         for(let i=1; i<10; i++){
@@ -11,11 +11,11 @@ const getApiInfo = async()=>{
             // console.log(recipe);
         }
         const arrayResult = await Promise.all(arrayPromises).then(res => res);
-        console.log(arrayResult);
-        console.log('Cantidad de recetas: ', arrayResult.length);
+        // console.log(arrayResult);
+        // console.log('Cantidad de recetas: ', arrayResult.length);
         const arrayFinal = arrayResult.map((recipe) => {
             let newSteps = recipe?.analyzedInstructions[0]?.steps?.map((step)=>step.step);
-            console.log(recipe);
+            // console.log(recipe);
             return recipe?{
                 id: recipe.id,
                 name: recipe.title,
