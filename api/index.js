@@ -20,10 +20,22 @@
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 const {findOrCreateDiets} = require('./src/routes/controllers/findOrCreateDiets.js');
+
+
+
+
+
+// const cors = require("cors");
+// server.use(cors())
+
+
+
+
+
 // Syncing all the models at once.
 conn.sync({ force: false }).then(() => {
   console.log('FINDORCREATE', findOrCreateDiets);
-  findOrCreateDiets();
+  // findOrCreateDiets(); // LA COMENTO PARA NO GASTAR PETICIONES, LUEGO SE DESCOMENTA
   server.listen(3001, () => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console
   });
