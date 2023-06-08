@@ -2,7 +2,7 @@ const {Router}= require('express');
 const router=Router();
 const getApiInfo=require('./getApiInfo');
 const axios=require('axios');
-const API_KEY = '9f9b9dbd1a804ddabea15e6db712a786';
+const API_KEY = 'ca4d5e6906b74b61aa36be974860107b';
 const {Recipe, Diet}=require('../../db');
 const validator=require('validator');
 

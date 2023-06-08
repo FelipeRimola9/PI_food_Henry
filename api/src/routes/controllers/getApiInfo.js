@@ -1,21 +1,18 @@
 const axios = require ('axios');
 // const {API_KEY}= process.env;
-const API_KEY = '9f9b9dbd1a804ddabea15e6db712a786';
+const API_KEY = 'ca4d5e6906b74b61aa36be974860107b';
+const { Recipe, Diet } = require("../../db")
 const getApiInfo = async()=>{
-    // console.log('APIKEY ', API_KEY)
+
     try {
         let arrayPromises=[];    
         for(let i=1; i<10; i++){
             const recipe= axios.get(`https://api.spoonacular.com/recipes/${i}/information?apiKey=${API_KEY}`).then(res => res.data, err => err.mensage);
             arrayPromises.push(recipe); 
-            // console.log(recipe);
         }
         const arrayResult = await Promise.all(arrayPromises).then(res => res);
-        // console.log(arrayResult);
-        // console.log('Cantidad de recetas: ', arrayResult.length);
-        const arrayFinal = arrayResult.map((recipe) => {
+        const newArray = arrayResult.map((recipe) => {
             let newSteps = recipe?.analyzedInstructions[0]?.steps?.map((step)=>step.step);
-            // console.log(recipe);
             return recipe?{
                 id: recipe.id,
                 name: recipe.title,
@@ -26,8 +23,10 @@ const getApiInfo = async()=>{
                 steps: newSteps,
             }:null;
         })
-        let arrayFilter=arrayFinal.filter((recipe)=>recipe?true:false);
-        return arrayFilter;
+        let arrayFinal=newArray.filter((recipe)=>recipe?true:false);
+        const recipesDb = await Recipe.findAll({include: Diet});
+        const finalResponse = arrayFinal.concat(recipesDb);
+        return finalResponse;
     } catch (error) {
         console.log('Error Funcion GetApiInfo');
         console.log(error);
