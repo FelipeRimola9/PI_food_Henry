@@ -1,6 +1,15 @@
 import axios from "axios"
 import { HOST } from "../utils";
-import { GET_RECIPES, SEARCH_RECIPE, GET_RECIPE_ID, GET_DIETS } from "./actionTypes";
+import { GET_RECIPES,
+    SEARCH_RECIPE,
+    GET_RECIPE_ID,
+    GET_DIETS,
+    FILTER_BY_DIET,
+    FILTER_ORIGIN,
+    ORDER_ALFABETIC_ASC,
+    ORDER_ALFABETIC_DES,
+    ORDER_HEALTHSCORE_ASC,
+    ORDER_HEALTHSCORE_DES } from "./actionTypes";
 
 export function getRecipes() {
     return async function(dispatch) {
@@ -58,4 +67,77 @@ export function getDietsFromDb() {
             console.log(error);
         }
     }
+};
+
+export function filterRecipesByDiet(diet) {
+    return async function (dispatch) {
+        try {
+            dispatch({
+                type: FILTER_BY_DIET,
+                payload: diet
+            }) 
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+export function filterRecipesByOrigin(value) {
+    return async function (dispatch) {
+        try {
+            dispatch({
+                type: FILTER_ORIGIN,
+                payload: value
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+export function orderAlfabeticAsc() {
+    return async function (dispatch) {
+        try {
+            dispatch({
+                type: ORDER_ALFABETIC_ASC,
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+export function orderAlfabeticDes() {
+    return async function (dispatch) {
+        try {
+            dispatch({
+                type: ORDER_ALFABETIC_DES
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+export function orderHealthScoreAsc() {
+    return async function (dispatch) {
+        try {
+            dispatch({
+                type: ORDER_HEALTHSCORE_ASC
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+export function orderHealthScoreDes() {
+    return async function (dispatch) {
+        try {
+            dispatch({
+                type: ORDER_HEALTHSCORE_DES
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }    
 }
