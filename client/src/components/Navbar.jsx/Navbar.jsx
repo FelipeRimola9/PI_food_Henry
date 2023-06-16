@@ -10,63 +10,80 @@ import {
   orderAlfabeticAsc,
   orderAlfabeticDes,
   orderHealthScoreAsc,
-  orderHealthScoreDes
+  orderHealthScoreDes,
+  resetRecipes,
 } from "../../actions";
 
-export default function Navbar() {
+export default function Navbar({ paginate }) {
   const dispatch = useDispatch();
-  const [filterValue, setFilterValue] = useState("");
-  const diets = useSelector((state)=>state.diets);
+  const diets = useSelector((state) => state.diets);
 
   const history = useHistory();
   function handlerNavigateCreateForm(e) {
-    e.preventDefault()
+    e.preventDefault();
     history.push(`/createRecipe`);
   }
 
-
- function handlerFilterValue(e) {
-  e.preventDefault();
-  dispatch(filterRecipesByDiet(e.target.value))
- }
- function handlerFilterOrigin(e) {
-  console.log("e.target.value: ", e.target.value);
-  dispatch(filterRecipesByOrigin(e.target.value));
- }
- function handlerOrderAlf(e) {
-   if(e.target.value !== "default") {
-     if(e.target.value === "asc") {
-       dispatch(orderAlfabeticAsc());
-       e.target.value = "default"
+  function handlerFilterValue(e) {
+    e.preventDefault();
+    dispatch(filterRecipesByDiet(e.target.value));
+    paginate(1)
+  }
+  function handlerFilterOrigin(e) {
+    console.log("e.target.value: ", e.target.value);
+    dispatch(filterRecipesByOrigin(e.target.value));
+    paginate(1)
+  }
+  function handlerOrderAlf(e) {
+    if (e.target.value !== "default") {
+      if (e.target.value === "asc") {
+        dispatch(orderAlfabeticAsc());
+        e.target.value = "default";
+        paginate(1)
       } else {
-        dispatch(orderAlfabeticDes())
-       e.target.value = "default"
+        dispatch(orderAlfabeticDes());
+        e.target.value = "default";
+        paginate(1)
       }
-   }
- };
-function handlerOrderHealthScore(e) {
-  if(e.target.value !== "default") {
-    if (e.target.value === "max") {
-      dispatch(orderHealthScoreAsc());
-      e.target.value = "default";
-    } else {
-      dispatch(orderHealthScoreDes());
-      e.target.value = "default";
     }
   }
-};
+  function handlerOrderHealthScore(e) {
+    if (e.target.value !== "default") {
+      if (e.target.value === "max") {
+        dispatch(orderHealthScoreAsc());
+        e.target.value = "default";
+        paginate(1)
+      } else {
+        dispatch(orderHealthScoreDes());
+        e.target.value = "default";
+        paginate(1)
+      }
+    }
+  }
+  function handlerReset(e) {
+    e.preventDefault();
+    dispatch(resetRecipes())
+    paginate(1)
+  }
+  function handlerNavigateLanding(e) {
+    e.preventDefault();
+    history.push("/");
+  }
   useEffect(() => {
     dispatch(getDietsFromDb());
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("Rendering comp Navbar", diets);
-  },[diets]);
+  }, [diets]);
 
-   return (
+  return (
     <div className={s.navbarContainer}>
-
-      <button onClick={(e)=>handlerNavigateCreateForm(e)}>Crear Receta</button>
+      <button onClick={(e) => handlerNavigateCreateForm(e)}>
+        Crear Receta
+      </button>
+      <button onClick={(e)=>handlerNavigateLanding(e)}>Volver al Landing</button>
+      <button onClick={(e)=>handlerReset(e)}>Todas las recetas</button>
 
       <select onChange={(e) => handlerFilterValue(e)}>
         <option value="default">Filtra por dietas</option>
@@ -78,27 +95,25 @@ function handlerOrderHealthScore(e) {
             ))
           : null}
       </select>
-      
-       <select onChange={(e) => handlerFilterOrigin(e)}>
+
+      <select onChange={(e) => handlerFilterOrigin(e)}>
         <option value="default">Filtra por origen DB o Api</option>
         <option value={true}>DB</option>
         <option value={false}>API</option>
-      </select> 
-      
-       <select onChange={(e) => handlerOrderAlf(e)}>
+      </select>
+
+      <select onChange={(e) => handlerOrderAlf(e)}>
         <option value="default">Orden Alfabetico</option>
         <option value="asc">Ascendente</option>
         <option value="des">Descendente</option>
       </select>
 
-      <select onChange={(e)=>handlerOrderHealthScore(e)}>
+      <select onChange={(e) => handlerOrderHealthScore(e)}>
         <option value="default">Orden por Health Score</option>
         <option value="max">Max</option>
         <option value="min">Min</option>
       </select>
-
-
     </div>
-  )
+  );
 }
 

@@ -15,6 +15,8 @@ module.exports = (sequelize) => {
       defaultValue: UUIDV4,
     }
   },
-  {timestamps: false,}
+  {
+    timestamps: false
+  }
   );
 };

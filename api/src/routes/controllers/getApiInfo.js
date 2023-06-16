@@ -1,6 +1,6 @@
 const axios = require ('axios');
 // const {API_KEY}= process.env;
-const API_KEY = '4e5042a3bce24c61b3db7b8a9680fdbe';
+const API_KEY = 'ca4d5e6906b74b61aa36be974860107b';
 const { Recipe, Diet } = require("../../db")
 const getApiInfo = async()=>{
 
@@ -11,6 +11,7 @@ const getApiInfo = async()=>{
             arrayPromises.push(recipe); 
         }
         const arrayResult = await Promise.all(arrayPromises).then(res => res);
+
         const newArray = arrayResult.map((recipe) => {
             let newSteps = recipe?.analyzedInstructions[0]?.steps?.map((step)=>step.step);
             return recipe?{
@@ -26,6 +27,8 @@ const getApiInfo = async()=>{
         let arrayFinal=newArray.filter((recipe)=>recipe?true:false);
         const recipesDb = await Recipe.findAll({include: Diet});
         const finalResponse = arrayFinal.concat(recipesDb);
+        // console.log("FINAL RESPONSE - GET API INFO: ", finalResponse);
+        
         return finalResponse;
     } catch (error) {
         console.log('Error Funcion GetApiInfo');

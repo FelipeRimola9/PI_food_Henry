@@ -1,0 +1,35 @@
+.divContainer {
+    background: aqua;
+    display: flex;
+}
+.container {
+    background: orange;
+    width: 20rem;
+    height: 22rem;
+}
+.diet {
+    background: rgb(233, 55, 55);
+    margin: .5rem .5rem 0 .5rem;
+    border-radius: 6px;
+    padding: .3rem;
+    box-shadow: 2px 2px .2rem .2rem rgb(0,0,0,0.25);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 2.3rem;
+}
+.diet p {
+    font-weight: 500;
+    color: #fff;
+    width: 6.5rem;
+    background-color: orange;
+}
+.diet button {
+    height: 1.8rem;
+    width: 1.8rem;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px .2rem .2rem rgb(0,0,0,0.25);
+    cursor: pointer;
+}

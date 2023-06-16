@@ -9,7 +9,9 @@ import { GET_RECIPES,
     ORDER_ALFABETIC_ASC,
     ORDER_ALFABETIC_DES,
     ORDER_HEALTHSCORE_ASC,
-    ORDER_HEALTHSCORE_DES } from "./actionTypes";
+    ORDER_HEALTHSCORE_DES,
+    POST_RECIPE,
+    RESET_RECIPES } from "./actionTypes";
 
 export function getRecipes() {
     return async function(dispatch) {
@@ -140,4 +142,29 @@ export function orderHealthScoreDes() {
             console.log(error);
         }
     }    
+};
+
+export function postRecipeIntoDB(input) {
+    return async function (dispatch) {
+        try {
+            await axios.post(`${HOST}/recipes`, input);
+            dispatch({
+                type: POST_RECIPE
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+export function resetRecipes() {
+    return async function (dispatch) {
+        try {
+            dispatch({
+                type: RESET_RECIPES
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }

@@ -7,7 +7,9 @@ import { GET_RECIPES,
     ORDER_ALFABETIC_ASC,
     ORDER_ALFABETIC_DES,
     ORDER_HEALTHSCORE_ASC,
-    ORDER_HEALTHSCORE_DES } from "../actions/actionTypes";
+    ORDER_HEALTHSCORE_DES,
+    POST_RECIPE,
+    RESET_RECIPES } from "../actions/actionTypes";
 import { isUUID } from "validator";
 
 const initialState={
@@ -166,6 +168,15 @@ const rootReducer=(state=initialState, action)=>{
             return {
                 ...state,
                 recipes: orderArrayDes
+            };
+        case POST_RECIPE:
+            return {
+                ...state
+            };
+        case RESET_RECIPES:
+            return {
+                ...state,
+                recipes: state.allRecipes
             };
             default:
                 return state

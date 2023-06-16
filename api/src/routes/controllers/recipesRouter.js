@@ -1,21 +1,20 @@
-const {Router}= require('express');
-const router=Router();
-const getApiInfo=require('./getApiInfo');
-const axios=require('axios');
-const API_KEY = '4e5042a3bce24c61b3db7b8a9680fdbe';
-const {Recipe, Diet}=require('../../db');
-const validator=require('validator');
+const { Router }= require('express');
+const router = Router();
+const getApiInfo = require('./getApiInfo');
+const axios = require('axios');
+const API_KEY = 'ca4d5e6906b74b61aa36be974860107b';
+const { Recipe, Diet } =  require('../../db');
+const validator = require('validator');
 
 router.get('/name', async(req, res)=>{
     try {
-        const {name}=req.query;
+        const { name } = req.query;
         if (!name){
         return res.status(404).send({
-                message:'Missing info'
+                message:'Error - Cannot search recipes without a name value'
             })
         }
         const ApiInfo=await getApiInfo()
-        console.log('TERMINE DE EJECUTAR GET API INFO')
         const filteredRecipes=ApiInfo.filter((recipe)=>{
         if (recipe.name.toLowerCase().includes(name.toLowerCase())){
             return true;
@@ -34,7 +33,13 @@ router.get('/name', async(req, res)=>{
             }
             });
         const filteredRecipesFinal=filteredRecipes.concat(filteredRecipesDb);
-        res.status(200).send(filteredRecipesFinal);
+
+        if(filteredRecipesFinal.length === 0) {
+            console.log('Route Get /recipes/name?name="..." - ERROR no recipes found with the specified name');
+            res.status(200).send([ { error: 'Route Get /recipes/name?name"..." - ERROR no recipes found with the specified name'} ])
+        } else {
+            res.status(200).send(filteredRecipesFinal);
+        }
     } catch (error) {
         console.log(error)
         res.status(404).send(error);
@@ -53,7 +58,7 @@ router.get('/:id',async(req,res)=>{
         } else {
             console.log('ruta id: CASO FALSE')
             const recipeById = await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`);
-            // console.log('RECIPE ID ', recipeById.data); // Accede a la propiedad 'data' para obtener los datos de la respuesta
+            // Accede a la propiedad 'data' para obtener los datos de la respuesta
             let newSteps;
             if (recipeById.data.analyzedInstructions.length) {
                 newSteps = recipeById.data.analyzedInstructions[0]?.steps?.map((step) => step.step);
@@ -67,7 +72,7 @@ router.get('/:id',async(req,res)=>{
                 healthScore: recipeById.data.healthScore,
                 steps: newSteps,
             };
-            return res.status(200).send(newRecipe); // Envía la variable 'newRecipe' en lugar de 'recipeById.data'
+            return res.status(200).send(newRecipe); 
         }
     } catch (error) {
         console.log(error);
@@ -76,13 +81,11 @@ router.get('/:id',async(req,res)=>{
 })
 router.get('/', async(req,res)=>{
     try {
+        console.log("RUTA GET RECIPES ");
         const allRecipes=await getApiInfo();
-        // console.log(getApiInfo);
-        // console.log('ALLRECIPES' ,allRecipes);
-        // if(allRecipes.length!==0){
-            return res.status(200).send(allRecipes);
-        // } else{
-        //     return res.status(404).send('Recipes not found');}
+        console.log("RUTA GET RECIPES ANTES DEL RES", allRecipes.length);
+        console.log("CANTIDAD DE RECETAS - ", allRecipes.length);
+        return res.status(200).send(allRecipes);
     } catch (error) {
     console.log(error);
     res.status(404).send(error);
@@ -90,10 +93,16 @@ router.get('/', async(req,res)=>{
 })
 router.post('/', async(req, res)=>{
 try {
-    const{
-        name, summary, image, diets, healthScore, steps
-    }=req.body;
-    if(!name||!summary||!image||!healthScore||!steps||!diets){
+    const { name, summary, image, diets, healthScore, steps } = req.body
+
+        
+    if (!name||
+        !summary ||
+        !image ||
+        healthScore < 0 ||
+        healthScore > 100 ||
+        !steps ||
+        !diets ) {
     return res.status(400).send('Missing info');
     }
     let newRecipe=await Recipe.create({
@@ -114,4 +123,5 @@ newRecipe.addDiet(dietsToAdd);
     res.status(404).send(error);
 }
 });
+
 module.exports=router;
