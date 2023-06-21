@@ -21,7 +21,7 @@ useEffect(()=>{
         {
             currentPage > 1 
             ? <div>
-                <button onClick={(e)=>{handlerPrevious(e)}}>Previous</button>
+                <button onClick={(e)=>{handlerPrevious(e)}}>Anterior</button>
               </div>
             : null
         }
@@ -35,7 +35,7 @@ useEffect(()=>{
         {
             currentPage < pageNumbers.length
             ? <div>
-                <button onClick={(e)=>{handlerNext(e)}}>Next</button>
+                <button onClick={(e)=>{handlerNext(e)}}>Siguiente</button>
               </div>
             : null
         }

@@ -1,12 +1,13 @@
 require('dotenv').config();
+const fs = require('fs');
 const axios = require ('axios');
 const { API_KEY }= process.env;
 const { Recipe, Diet } = require("../../db")
-const getApiInfo = async()=>{
 
+const getApiInfo = async()=>{
     try {
         let arrayPromises=[];    
-        for(let i=1; i<10; i++){
+        for(let i=1; i<115; i++){
             const recipe= axios.get(`https://api.spoonacular.com/recipes/${i}/information?apiKey=${API_KEY}`).then(res => res.data, err => err.mensage);
             arrayPromises.push(recipe); 
         }
@@ -24,15 +25,15 @@ const getApiInfo = async()=>{
                 steps: newSteps,
             }:null;
         })
-        let arrayFinal=newArray.filter((recipe)=>recipe?true:false);
+        let arrayFinal = newArray.filter((recipe)=>recipe?true:false);
         const recipesDb = await Recipe.findAll({include: Diet});
         const finalResponse = arrayFinal.concat(recipesDb);
-        console.log("FINAL RESPONSE - GET API INFO: ", finalResponse);
         
         return finalResponse;
     } catch (error) {
-        console.log('Error Funcion GetApiInfo');
+        console.log('Error Function GetApiInfo');
         console.log(error);
     }
 }
+
 module.exports=getApiInfo

@@ -49,6 +49,6 @@ export default function Detail() {
       <img src={recipeId.image} alt="img not found" />
     </div>
   ) : (
-    <p>Cargando receta..</p>
+    <p>Cargando receta...</p>
   );
 }

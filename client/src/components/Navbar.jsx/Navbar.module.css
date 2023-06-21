@@ -3,7 +3,7 @@
     height: 6rem;
 }
 .divBtns {
-    background: orange;
+    background: rgb(255, 217, 0);
     display: flex;
     justify-content: space-between;
 }
@@ -17,7 +17,7 @@
     font-family: 'Roboto';
 }
 .divSelects {
-    background-color: purple;
+    background-color: rgb(146, 119, 146);
     display: flex;
     flex-wrap: wrap;
     width: 100%;

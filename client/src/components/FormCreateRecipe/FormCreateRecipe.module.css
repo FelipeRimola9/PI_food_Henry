@@ -1,14 +1,14 @@
 .divContainer {
-    background: aqua;
+    background: rgb(241, 252, 97);
     display: flex;
 }
 .container {
-    background: orange;
+    background: rgb(230, 231, 146);
     width: 20rem;
     height: 22rem;
 }
 .diet {
-    background: rgb(233, 55, 55);
+    background: rgb(29, 119, 21);
     margin: .5rem .5rem 0 .5rem;
     border-radius: 6px;
     padding: .3rem;
@@ -22,7 +22,6 @@
     font-weight: 500;
     color: #fff;
     width: 6.5rem;
-    background-color: orange;
 }
 .diet button {
     height: 1.8rem;

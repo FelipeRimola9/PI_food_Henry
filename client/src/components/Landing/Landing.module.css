@@ -1,0 +1,36 @@
+.landingContainer {
+    background: url('https://c8.alamy.com/compes/2e3hg2h/juego-de-comida-rapida-dibujado-a-mano-ilustracion-vectorial-de-fideos-fondo-2e3hg2h.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+  }
+
+  .landingContainer button {
+    margin-top: 20px;
+  }
+
+  .highlightedText {
+    font-weight: bold;
+    font-size: 24px;
+    color: rgb(255, 217, 0);
+    background-color: black;
+    padding: 5px 10px;
+  }
+  
+  .buttonStart {
+    background-color: rgb(255, 217, 0);
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }

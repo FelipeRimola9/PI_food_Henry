@@ -1,7 +1,7 @@
 .cardContainer {
     background: #333;
-    width: 12rem;
-    height: 18rem;
+    width: 16rem;
+    height: 22rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,12 +29,12 @@
     padding: .2rem .5rem .2rem .5rem;
 }
  .img {
-    width: 11.5rem;
-    height: 11.5rem;
+    width: 14.5rem;
+    height: 13rem;
     border-radius: 12px
 }
 .divHealthScore {
-    /* background-color: yellow; */
+    /* background-color: rgb(255, 217, 0); */
     display: flex;
     width: 6rem;
     height: 2.4rem;
