@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-
+import s from "./Paginate.module.css"
 export default function Paginate({ recipesNumber, paginate, currentPage, recipesPerPage }) {
     const pageNumbers = [];
 
@@ -15,14 +15,9 @@ function handlerNext(e) {
     paginate(currentPage+1)
 }
 useEffect(()=>{
-    console.log("Rendering Paginate");
-    console.log("PAGE NUMBERS: ",pageNumbers);
-    console.log("recipesNumber: ",recipesNumber);
-    console.log("recipesPerPage: ",recipesPerPage);
 },[currentPage])
   return (
-    <div>
-      <div>
+    <div className={s.divContainer}>
         {
             currentPage > 1 
             ? <div>
@@ -44,7 +39,6 @@ useEffect(()=>{
               </div>
             : null
         }
-      </div>
     </div>
   )
 }

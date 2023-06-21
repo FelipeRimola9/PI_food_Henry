@@ -79,21 +79,24 @@ export default function Navbar({ paginate }) {
 
   return (
     <div className={s.navbarContainer}>
+      <div className={s.divBtns}>
+      <button onClick={(e)=>handlerNavigateLanding(e)}>Volver al Landing</button>
+      <button onClick={(e)=>handlerReset(e)}>Todas las recetas</button>
       <button onClick={(e) => handlerNavigateCreateForm(e)}>
         Crear Receta
       </button>
-      <button onClick={(e)=>handlerNavigateLanding(e)}>Volver al Landing</button>
-      <button onClick={(e)=>handlerReset(e)}>Todas las recetas</button>
+      </div>
 
+      <div className={s.divSelects}>
       <select onChange={(e) => handlerFilterValue(e)}>
         <option value="default">Filtra por dietas</option>
         {diets.length !== 0
           ? diets?.map((diet) => (
-              <option value={diet.name} key={diet.id}>
+            <option value={diet.name} key={diet.id}>
                 {diet.name}
               </option>
             ))
-          : null}
+            : null}
       </select>
 
       <select onChange={(e) => handlerFilterOrigin(e)}>
@@ -113,6 +116,7 @@ export default function Navbar({ paginate }) {
         <option value="max">Max</option>
         <option value="min">Min</option>
       </select>
+      </div>
     </div>
   );
 }

@@ -11,7 +11,8 @@ import { GET_RECIPES,
     ORDER_HEALTHSCORE_ASC,
     ORDER_HEALTHSCORE_DES,
     POST_RECIPE,
-    RESET_RECIPES } from "./actionTypes";
+    RESET_RECIPES,
+    DELETE_RECIPE } from "./actionTypes";
 
 export function getRecipes() {
     return async function(dispatch) {
@@ -162,6 +163,21 @@ export function resetRecipes() {
         try {
             dispatch({
                 type: RESET_RECIPES
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+export function deleteRecipe(id) {
+    return async function (dispatch) {
+        try {
+            console.log("ACTION - IDDD: ", id);
+            await axios.delete(`${HOST}/recipes/${id}`)
+            dispatch({
+                type: DELETE_RECIPE,
+                payload: id
             })
         } catch (error) {
             console.log(error);

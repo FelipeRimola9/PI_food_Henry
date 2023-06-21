@@ -9,7 +9,8 @@ import { GET_RECIPES,
     ORDER_HEALTHSCORE_ASC,
     ORDER_HEALTHSCORE_DES,
     POST_RECIPE,
-    RESET_RECIPES } from "../actions/actionTypes";
+    RESET_RECIPES,
+    DELETE_RECIPE } from "../actions/actionTypes";
 import { isUUID } from "validator";
 
 const initialState={
@@ -178,6 +179,12 @@ const rootReducer=(state=initialState, action)=>{
                 ...state,
                 recipes: state.allRecipes
             };
+        case DELETE_RECIPE:
+            return {
+                ...state,
+                allRecipes: state.allRecipes.map(e=>e).filter((recipe)=>recipe.id!==action.payload),
+                recipes: state.recipes.map(e=>e).filter((recipe)=>recipe.id!==action.payload)
+            }
             default:
                 return state
     }

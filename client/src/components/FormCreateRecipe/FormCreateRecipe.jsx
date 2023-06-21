@@ -14,7 +14,7 @@ const [input, setInput] = useState({
     name: "",
     summary: "",
     healthScore: 0,
-    steps: [],
+    steps: [""],
     diets: [],
     image: ""
 })
@@ -27,7 +27,7 @@ const errors = {
   image: "",
 };
 
-function handlerChangeInput(e, step) {
+function handlerChangeInput(e, index) {
     e.preventDefault();
     if(e.target.name === "diets") {
         console.log("CASO DIETS");
@@ -42,12 +42,14 @@ function handlerChangeInput(e, step) {
         }
     } 
     if(e.target.name === "steps") {
-        let steps = input.steps
-        console.log("CASO STEPS : --steps", steps);
-        steps[step]= e.target.value;
+        let newSteps = input.steps
+        // console.log("CASO STEPS : --steps", newSteps);
+        // console.log("INDEX: ", index);
+        newSteps[index] = e.target.value;
+        // console.log("NEW STEPS",newSteps);
         setInput({
             ...input,
-            steps: steps
+            steps: newSteps
         });
     } 
     if(e.target.name === "healthScore") {
@@ -110,10 +112,10 @@ if(input.image === "") {
 } else {
     errors.image = ""
 }
-if(input.steps.length === 0) {
-    errors.steps = "Debes escribir al menos un paso para el plato"
+if (input.steps[input.steps.length - 1] === "") {
+  errors.steps = "Debes escribir algo en el campo abierto de pasos";
 } else {
-    errors.steps = ""
+  errors.steps = "";
 }
 if(input.diets.length === 0) {
     errors.diets = "Debes indicar al menos una dieta"
@@ -122,10 +124,18 @@ if(input.diets.length === 0) {
 }
 }
 
-let [currentPagesSteps, setCurrentPagesSteps] = useState([]);
+let [currentPagesSteps, setCurrentPagesSteps] = useState([0]);
 function handlerAddSteps(e) {
     e.preventDefault();
-    setCurrentPagesSteps([...currentPagesSteps, currentPagesSteps.length])
+    if (input.steps[input.steps.length - 1] !== "") {
+      setCurrentPagesSteps([...currentPagesSteps, currentPagesSteps.length]);
+      setInput({
+        ...input,
+        steps: [...input.steps, ""],
+      });
+    } else {
+      alert("No puedes dejar el paso anterior vacío.");
+    }
 }
 
 function handlerPostRecipe(e) {
@@ -148,7 +158,6 @@ function handlerPostRecipe(e) {
         errors.diets
     );
   } else {
-    // console.log("CASO NO HAY ERRORES - POSTEAR RECETA");
     let newObj = {...input, name: input.name.trim()}
     dispatch(postRecipeIntoDB(newObj));
     alert("Se ha creado la receta con éxito!")
@@ -161,25 +170,36 @@ function handlerNavigate(e) {
 };
 function handlerSubtractDiet(e) {
   if(input.diets.includes(e.target.value)) {
-    // console.log("HANDLER SUBTRACT: --e.target.value", e.target.value);
     let index = input.diets.indexOf(e.target.value);
     console.log(index);
     let firstPart = input.diets.slice(0, index);
     let secondPart = input.diets.slice(index+1);
     let newDiets = [...firstPart, ...secondPart];
-    // console.log("NEW DIETS: ",newDiets);
     setInput({
       ...input,
       diets: newDiets
     })
   };
 };
-
-
-
-useEffect(()=>{
-},[currentPagesSteps])
-
+function handlerSubtractStep(e) {
+  e.preventDefault();
+  if(input.steps.length > 1) {
+    
+    let array = [...input.steps];
+    array.splice(-1)
+    setInput({
+      ...input,
+      steps: array
+    });
+    let array2 = [...currentPagesSteps];
+    array2.splice(-1);
+    setCurrentPagesSteps([
+      ...array2
+    ])
+  } else {
+    alert("Tiene que haber al menos un paso")
+  }
+}
 useEffect(()=>{
     dispatch(getDietsFromDb())
 },[])
@@ -190,71 +210,81 @@ useEffect(()=>{
     return (
       <div className={s.divContainer}>
         <div className={s.container}>
-
-        <button onClick={(e)=>handlerNavigate(e)}>Volver</button>
-        <div>
+          <button onClick={(e) => handlerNavigate(e)}>Volver</button>
           <div>
-            <label>Nombre </label>
-            <input
-              name="name"
-              value={input.name}
-              type="text"
-              onChange={(e) => handlerChangeInput(e)}
+            <div>
+              <label>Nombre </label>
+              <input
+                name="name"
+                value={input.name}
+                type="text"
+                onChange={(e) => handlerChangeInput(e)}
               />
-          </div>
+            </div>
 
-          <div>
-            <label>Nivel de saludable </label>
-            <input
-              name="healthScore"
-              value={input.healthScore}
-              type="number"
-              onChange={(e) => handlerChangeInput(e)}
+            <div>
+              <label>Nivel de saludable </label>
+              <input
+                name="healthScore"
+                value={input.healthScore}
+                type="number"
+                onChange={(e) => handlerChangeInput(e)}
               />
-          </div>
+            </div>
 
-          <div>
-            <label>Resumen del plato </label>
-            <textarea name="summary" onChange={(e) => handlerChangeInput(e)} />
-          </div>
-
-          <div>
-            <label>Imagen </label>
-            <input
-              name="image"
-              type="text"
-              onChange={(e) => handlerChangeInput(e)}
+            <div>
+              <label>Resumen del plato </label>
+              <textarea
+                name="summary"
+                onChange={(e) => handlerChangeInput(e)}
               />
-          </div>
+            </div>
 
-          <select name="diets" onChange={(e) => handlerChangeInput(e)}>
-            <option value="default">Selecciona las dietas</option>
-            {diets?.map((diet) => (
-              <option value={diet.name}>{diet.name}</option>
+            <div>
+              <label>Imagen </label>
+              <input
+                name="image"
+                type="text"
+                onChange={(e) => handlerChangeInput(e)}
+              />
+            </div>
+
+            <select name="diets" onChange={(e) => handlerChangeInput(e)}>
+              <option value="default">Selecciona las dietas</option>
+              {diets?.map((diet) => (
+                <option value={diet.name}>{diet.name}</option>
               ))}
-          </select>
-        </div>
-
-        <div>
-          <button onClick={(e) => handlerAddSteps(e)}>Agregar Pasos</button>
-          <div>
-          {
-            currentPagesSteps.map((step) => <input name="steps" ind={step} onChange={(e) => handlerChangeInput(e, step)}/>)
-          }
+            </select>
           </div>
-        </div>
-        <button onClick={(e)=>handlerPostRecipe(e)}>Crear receta</button>
+          <div>
+            <button onClick={(e) => handlerAddSteps(e)}>Agregar Pasos</button>
+            <div>
+              {currentPagesSteps.map((index) => (
+                <input
+                  name="steps"
+                  ind={index}
+                  value={input.steps[index]}
+                  onChange={(e) => handlerChangeInput(e, index)}
+                />
+              ))}
+            </div>
+          </div>
+          <button onClick={(e) => handlerSubtractStep(e)}>
+            Quitar último paso
+          </button>
+          <button onClick={(e) => handlerPostRecipe(e)}>Crear receta</button>
         </div>
         <div className={s.divCurrentDiets}>
-          {
-            input.diets.length
-            ? input.diets.map((diet) => 
-            <div className={s.diet}>
-              <p>{diet}</p>
-              <button value={diet}onClick={(e) =>handlerSubtractDiet(e)}>X</button>
-            </div> )
-            : null
-          }
+          {input.diets.length
+            ? input.diets.map((diet) => (
+                <div className={s.diet}>
+                  <p>{diet}</p>
+                  <button value={diet} onClick={(e) => handlerSubtractDiet(e)}>
+                    X
+                  </button>
+                </div>
+              ))
+            : null}
         </div>
       </div>
     );

@@ -1,10 +1,33 @@
+require('dotenv').config();
+const { API_KEY }= process.env;
 const { Router }= require('express');
 const router = Router();
 const getApiInfo = require('./getApiInfo');
 const axios = require('axios');
-const API_KEY = 'ca4d5e6906b74b61aa36be974860107b';
 const { Recipe, Diet } =  require('../../db');
 const validator = require('validator');
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log("IDDDDDDDDD: ", id);
+        if(id) {
+            let deletedRecipe = Recipe.destroy({
+                where: { id: id }
+            });
+            if(deletedRecipe) {
+                res.status(200).send(`The recipe with the ID: ${id} was deleted`)
+            } else {
+                res.status(404).send(`The recipe with the ID: ${id} was not found`)
+            }
+        } else {
+            res.status(404).send("Error on DELETE /recipe; ID was not provided");
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(404).send(error)
+    }
+})
 
 router.get('/name', async(req, res)=>{
     try {
@@ -123,5 +146,6 @@ newRecipe.addDiet(dietsToAdd);
     res.status(404).send(error);
 }
 });
+
 
 module.exports=router;
